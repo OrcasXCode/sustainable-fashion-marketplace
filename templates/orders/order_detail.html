@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Details - Sustainable Fashion{% endblock %}
+
+{% block content %}
+<section class="container mt-4 mb-4">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">Order #{{ order.id }}</h1>
+        <p style="color: #737373; margin-bottom: 2rem;">Placed on {{ order.created_at|date:"F d, Y at h:i A" }}</p>
+        
+        <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Order Status</h3>
+            <p style="font-size: 1.25rem;">
+                {% if order.status == 'pending' %}
+                    <span class="badge badge-warning" style="font-size: 1rem; padding: 0.5rem 1rem;">{{ order.get_status_display }}</span>
+                {% elif order.status == 'delivered' %}
+                    <span class="badge badge-success" style="font-size: 1rem; padding: 0.5rem 1rem;">{{ order.get_status_display }}</span>
+                {% elif order.status == 'cancelled' or order.status == 'returned' %}
+                    <span class="badge badge-danger" style="font-size: 1rem; padding: 0.5rem 1rem;">{{ order.get_status_display }}</span>
+                {% else %}
+                    <span class="badge badge-info" style="font-size: 1rem; padding: 0.5rem 1rem;">{{ order.get_status_display }}</span>
+                {% endif %}
+            </p>
+        </div>
+        
+        <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Product Details</h3>
+            <div style="display: flex; gap: 2rem;">
+                {% if order.product.image %}
+                    <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}" 
+                         style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px;">
+                {% else %}
+                    <div style="width: 150px; height: 150px; background-color: #f5f5f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #737373;">
+                        No Image
+                    </div>
+                {% endif %}
+                
+                <div style="flex: 1;">
+                    <h4 style="font-size: 1.25rem; margin-bottom: 0.5rem;">{{ order.product.name }}</h4>
+                    <p style="color: #737373; margin-bottom: 0.5rem;">{{ order.product.seller.brand_name }}</p>
+                    <p style="margin-bottom: 0.5rem;"><strong>Material:</strong> {{ order.product.material }}</p>
+                    <p style="margin-bottom: 0.5rem;"><strong>Quantity:</strong> {{ order.quantity }}</p>
+                    <p style="font-size: 1.25rem; font-weight: 700; margin-top: 1rem;">₹{{ order.total_price }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Shipping Address</h3>
+            <p style="white-space: pre-line; color: #525252;">{{ order.shipping_address }}</p>
+        </div>
+        
+        <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem;">
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Order Summary</h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span>Subtotal</span>
+                <span>₹{{ order.total_price }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e5e5;">
+                <span>Shipping</span>
+                <span>FREE</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 700;">
+                <span>Total</span>
+                <span>₹{{ order.total_price }}</span>
+            </div>
+        </div>
+        
+        <div class="text-center mt-3">
+            <a href="{% url 'order_list' %}" class="btn-white-outline" style="padding: 0.75rem 2rem;">
+                Back to Orders
+            </a>
+            {% if order.status == 'pending' or order.status == 'confirmed' %}
+                <form method="POST" action="{% url 'cancel_order' order.id %}" style="display: inline; margin-left: 1rem;">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Are you sure you want to cancel this order?')" 
+                            style="padding: 0.75rem 2rem; background-color: #737373; color: #fff; border: none; border-radius: 8px; cursor: pointer;">
+                        Cancel Order
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

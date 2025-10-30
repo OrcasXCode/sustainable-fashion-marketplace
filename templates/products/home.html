@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Sustainable Fashion{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>Sustainable Fashion Marketplace</h1>
+        <p>Discover eco-friendly fashion from verified ethical brands</p>
+        <div class="hero-cta">
+            <a href="{% url 'product_list' %}" class="btn">Shop Now</a>
+            <a href="{% url 'seller_register' %}" class="btn-outline">Become a Seller</a>
+        </div>
+    </div>
+</section>
+
+<section class="container">
+    <h2 class="text-center mt-4 mb-4" style="font-size: 2.5rem; font-weight: 700;">Featured Products</h2>
+    
+    {% if products %}
+        <div class="grid grid-4">
+            {% for product in featured_products %}
+                <div class="card">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img">
+                    {% else %}
+                        <div class="card-img" style="display: flex; align-items: center; justify-content: center; background-color: #f5f5f5; color: #737373;">
+                            No Image
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="card-title">{{ product.name }}</h3>
+                        <p class="card-text">{{ product.description|truncatewords:15 }}</p>
+                        <p style="font-size: 0.9rem; color: #737373;">
+                            <strong>Material:</strong> {{ product.material }}
+                        </p>
+                        <p style="font-size: 0.9rem; color: #737373;">
+                            <strong>Brand:</strong> {{ product.seller.brand_name }}
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <span style="font-size: 1.5rem; font-weight: 700;">₹{{ product.price }}</span>
+                        <a href="{% url 'product_detail' product.id %}" class="btn-black">View Details</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4 mb-4">
+            <a href="{% url 'product_list' %}" class="btn-black" style="padding: 1rem 2rem; font-size: 1.1rem;">View All Products</a>
+        </div>
+    {% else %}
+        <div class="text-center p-4">
+            <p style="font-size: 1.25rem; color: #737373;">No products available yet.</p>
+        </div>
+    {% endif %}
+</section>
+
+<section class="container mt-4 mb-4">
+    <div class="grid grid-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4 class="card-title">Eco-Friendly Materials</h4>
+                <p class="card-text">All products use sustainable and ethical materials</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body text-center">
+                <h4 class="card-title">Verified Sellers</h4>
+                <p class="card-text">Every brand is verified by our team</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body text-center">
+                <h4 class="card-title">Transparent Sourcing</h4>
+                <p class="card-text">Full transparency on product origins and materials</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

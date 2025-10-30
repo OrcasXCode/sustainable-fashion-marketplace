@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}My Products - Sustainable Fashion{% endblock %}
+
+{% block content %}
+<section class="container mt-4 mb-4">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="font-size: 2.5rem; font-weight: 700;">My Products</h1>
+        <a href="{% url 'add_product' %}" class="btn-black">+ Add Product</a>
+    </div>
+    
+    {% if products %}
+        <div class="grid grid-4">
+            {% for product in products %}
+                <div class="card">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img">
+                    {% else %}
+                        <div class="card-img" style="display: flex; align-items: center; justify-content: center; background-color: #f5f5f5; color: #737373;">
+                            No Image
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="card-title">{{ product.name }}</h3>
+                        <p class="card-text">{{ product.description|truncatewords:10 }}</p>
+                        <p style="font-size: 0.9rem; color: #737373;">
+                            <strong>Stock:</strong> {{ product.stock }}
+                        </p>
+                        <p style="font-size: 0.9rem;">
+                            {% if product.approved %}
+                                <span class="badge badge-success">Approved</span>
+                            {% else %}
+                                <span class="badge badge-warning">Pending</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <span style="font-size: 1.25rem; font-weight: 700;">₹{{ product.price }}</span>
+                        <div class="flex gap-1">
+                            <a href="{% url 'edit_product' product.id %}" class="btn-black" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center p-4">
+            <p style="font-size: 1.25rem; color: #737373;">You haven't added any products yet.</p>
+            <a href="{% url 'add_product' %}" class="btn-black mt-2">Add Your First Product</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

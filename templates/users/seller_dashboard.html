@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Seller Dashboard - Sustainable Fashion{% endblock %}
+
+{% block content %}
+<section class="dashboard-header">
+    <div class="container">
+        <h1 style="font-size: 2.5rem; font-weight: 700;">Seller Dashboard</h1>
+        <p style="font-size: 1.1rem; color: #525252;">Welcome back, {{ seller_profile.brand_name }}!</p>
+        
+        {% if not seller_profile.verified %}
+            <div style="background-color: #f5f5f5; border-left: 4px solid #000; padding: 1rem; margin-top: 1rem; border-radius: 4px;">
+                <strong>Pending Verification</strong> - Your seller account is awaiting admin approval. 
+                You cannot add products until verified.
+            </div>
+        {% else %}
+            <div style="background-color: #000; color: #fff; border-left: 4px solid #fff; padding: 1rem; margin-top: 1rem; border-radius: 4px;">
+                <strong>Verified Seller</strong> - Your account is active!
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="container mt-4">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.total_products }}</div>
+            <div class="stat-label">Total Products</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.approved_products }}</div>
+            <div class="stat-label">Approved</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.pending_products }}</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.total_orders }}</div>
+            <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">₹{{ stats.total_revenue }}</div>
+            <div class="stat-label">Revenue</div>
+        </div>
+    </div>
+</section>
+
+<section class="container mt-4">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2 style="font-size: 2rem; font-weight: 700;">Quick Actions</h2>
+    </div>
+    <div class="grid grid-3">
+        <a href="{% url 'add_product' %}" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-body text-center">
+                <h4 class="card-title">Add Product</h4>
+                <p class="card-text">List a new product</p>
+            </div>
+        </a>
+        <a href="{% url 'seller_products' %}" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-body text-center">
+                <h4 class="card-title">My Products</h4>
+                <p class="card-text">Manage inventory</p>
+            </div>
+        </a>
+        <a href="{% url 'seller_orders' %}" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-body text-center">
+                <h4 class="card-title">View Orders</h4>
+                <p class="card-text">Check order status</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section class="container mt-4 mb-4">
+    <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;">Recent Products</h2>
+    {% if recent_products %}
+        <div class="table" style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Added</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in recent_products %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td>₹{{ product.price }}</td>
+                            <td>{{ product.stock }}</td>
+                            <td>
+                                {% if product.approved %}
+                                    <span class="badge badge-success">Approved</span>
+                                {% else %}
+                                    <span class="badge badge-warning">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ product.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{% url 'edit_product' product.id %}" style="color: #000; margin-right: 0.5rem;">Edit</a>
+                                <a href="{% url 'product_detail' product.id %}" style="color: #525252;">View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p style="color: #737373;">No products yet. <a href="{% url 'add_product' %}" style="color: #000; font-weight: 600;">Add your first product</a></p>
+    {% endif %}
+</section>
+{% endblock %}

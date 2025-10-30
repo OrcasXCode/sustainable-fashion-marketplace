@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders - Sustainable Fashion{% endblock %}
+
+{% block content %}
+<section class="container mt-4 mb-4">
+    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 2rem;">My Orders</h1>
+    
+    {% if orders %}
+        <div class="table" style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.product.name }}</td>
+                            <td>{{ order.quantity }}</td>
+                            <td>₹{{ order.total_price }}</td>
+                            <td>
+                                {% if order.status == 'pending' %}
+                                    <span class="badge badge-warning">{{ order.get_status_display }}</span>
+                                {% elif order.status == 'delivered' %}
+                                    <span class="badge badge-success">{{ order.get_status_display }}</span>
+                                {% elif order.status == 'cancelled' or order.status == 'returned' %}
+                                    <span class="badge badge-danger">{{ order.get_status_display }}</span>
+                                {% else %}
+                                    <span class="badge badge-info">{{ order.get_status_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ order.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{% url 'order_detail' order.id %}" style="color: #000; margin-right: 0.5rem;">View</a>
+                                {% if order.status == 'pending' or order.status == 'confirmed' %}
+                                    <form method="POST" action="{% url 'cancel_order' order.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" onclick="return confirm('Are you sure you want to cancel this order?')" 
+                                                style="background: none; border: none; color: #737373; cursor: pointer; text-decoration: underline;">
+                                            Cancel
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center p-4">
+            <p style="font-size: 1.25rem; color: #737373; margin-bottom: 1.5rem;">You haven't placed any orders yet.</p>
+            <a href="{% url 'product_list' %}" class="btn-black">Start Shopping</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Sustainable Fashion{% endblock %}
+
+{% block content %}
+<section class="container mt-4 mb-4">
+    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 2rem;">My Profile</h1>
+    
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+        <div>
+            <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Profile Information</h3>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ field.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn-black" style="padding: 0.75rem 2rem;">
+                        Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div>
+            <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Account Details</h3>
+                
+                <div style="margin-bottom: 1rem;">
+                    <p style="color: #737373; font-size: 0.9rem; margin-bottom: 0.25rem;">Username</p>
+                    <p style="font-weight: 600;">{{ user.username }}</p>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <p style="color: #737373; font-size: 0.9rem; margin-bottom: 0.25rem;">Role</p>
+                    <p style="font-weight: 600;">{{ user.get_role_display }}</p>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <p style="color: #737373; font-size: 0.9rem; margin-bottom: 0.25rem;">Member Since</p>
+                    <p style="font-weight: 600;">{{ user.date_joined|date:"F Y" }}</p>
+                </div>
+                
+                {% if user.role == 'seller' %}
+                    <div style="background-color: #f5f5f5; padding: 1rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <p style="font-size: 0.9rem; margin: 0;">
+                            <strong>Brand:</strong> {{ user.seller_profile.brand_name }}<br>
+                            <strong>Status:</strong> 
+                            {% if user.seller_profile.verified %}
+                                <span style="color: #000;">Verified</span>
+                            {% else %}
+                                <span style="color: #737373;">Pending</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            {% if orders %}
+            <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem; margin-top: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Recent Orders</h3>
+                
+                {% for order in orders %}
+                    <div style="padding: 1rem 0; border-bottom: 1px solid #e5e5e5;">
+                        <p style="font-weight: 600; margin-bottom: 0.25rem;">{{ order.product.name }}</p>
+                        <p style="font-size: 0.9rem; color: #737373; margin-bottom: 0.25rem;">Order #{{ order.id }}</p>
+                        <p style="font-size: 0.9rem;">
+                            {% if order.status == 'delivered' %}
+                                <span class="badge badge-success">{{ order.get_status_display }}</span>
+                            {% else %}
+                                <span class="badge badge-info">{{ order.get_status_display }}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endfor %}
+                
+                <a href="{% url 'order_list' %}" style="display: block; text-align: center; margin-top: 1rem; color: #000; font-weight: 600;">
+                    View All Orders →
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

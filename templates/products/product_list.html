@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Products - Sustainable Fashion{% endblock %}
+
+{% block content %}
+<section class="container mt-4">
+    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 2rem;">All Products</h1>
+    
+    <!-- Search and Filter Bar -->
+    <form method="GET" class="search-filter-bar">
+        <div class="form-group">
+            <label for="search">Search</label>
+            <input type="text" name="search" id="search" class="form-control" placeholder="Search products, brands, materials..." value="{{ search_query }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="material">Material</label>
+            <input type="text" name="material" id="material" class="form-control" placeholder="e.g., Organic Cotton" value="{{ material }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="sort">Sort By</label>
+            <select name="sort" id="sort" class="form-control">
+                <option value="">Default</option>
+                <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest First</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <button type="submit" class="btn-black" style="width: 100%;">Apply Filters</button>
+        </div>
+    </form>
+    
+    <!-- Products Grid -->
+    {% if products %}
+        <div class="grid grid-4 mb-4">
+            {% for product in products %}
+                <div class="card">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img">
+                    {% else %}
+                        <div class="card-img" style="display: flex; align-items: center; justify-content: center; background-color: #f5f5f5; color: #737373;">
+                            No Image
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="card-title">{{ product.name }}</h3>
+                        <p class="card-text">{{ product.description|truncatewords:12 }}</p>
+                        <p style="font-size: 0.85rem; color: #737373;">
+                            <strong>Material:</strong> {{ product.material }}
+                        </p>
+                        <p style="font-size: 0.85rem; color: #737373;">
+                            <strong>Brand:</strong> {{ product.seller.brand_name }}
+                        </p>
+                        {% if product.stock > 0 %}
+                            <p style="font-size: 0.85rem; color: #000;">
+                                <strong>Stock:</strong> {{ product.stock }} available
+                            </p>
+                        {% else %}
+                            <p style="font-size: 0.85rem; color: #737373;">
+                                <strong>Out of Stock</strong>
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <span style="font-size: 1.5rem; font-weight: 700;">₹{{ product.price }}</span>
+                        <a href="{% url 'product_detail' product.id %}" class="btn-black">View</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center p-4">
+            <p style="font-size: 1.25rem; color: #737373;">No products found matching your criteria.</p>
+            <a href="{% url 'product_list' %}" class="btn-black mt-2">Clear Filters</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

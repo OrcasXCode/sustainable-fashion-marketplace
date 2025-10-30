@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - Sustainable Fashion{% endblock %}
+
+{% block content %}
+<section class="container mt-4 mb-4">
+    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 2rem;">Checkout</h1>
+    
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+        <div>
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Shipping Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="shipping_address">Shipping Address *</label>
+                        <textarea name="shipping_address" id="shipping_address" class="form-control" rows="4" required 
+                                  placeholder="Enter your complete shipping address">{{ user.address }}</textarea>
+                    </div>
+                    
+                    <div style="background-color: #f5f5f5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <p style="font-size: 0.9rem; color: #525252; margin: 0;">
+                            <strong>Payment Method:</strong> Cash on Delivery (COD)
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Order Items</h3>
+                    
+                    {% for item in cart_items %}
+                        <div style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid #e5e5e5;">
+                            <div>
+                                <p style="font-weight: 600;">{{ item.product.name }}</p>
+                                <p style="color: #737373; font-size: 0.9rem;">{{ item.product.seller.brand_name }}</p>
+                                <p style="font-size: 0.9rem;">Quantity: {{ item.quantity }}</p>
+                            </div>
+                            <p style="font-weight: 600;">₹{{ item.subtotal }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" class="btn-black" style="width: 100%; padding: 1rem; font-size: 1.1rem; margin-top: 2rem;">
+                    Place Order
+                </button>
+            </form>
+        </div>
+        
+        <div>
+            <div class="cart-summary">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">Order Summary</h3>
+                
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: #737373;">
+                        <span>Items ({{ cart_items.count }})</span>
+                        <span>₹{{ total }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e5e5; color: #737373;">
+                        <span>Shipping</span>
+                        <span>FREE</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1.5rem; font-weight: 700;">
+                        <span>Total</span>
+                        <span>₹{{ total }}</span>
+                    </div>
+                </div>
+                
+                <div style="background-color: #f5f5f5; padding: 1rem; border-radius: 8px; margin-top: 1.5rem;">
+                    <p style="font-size: 0.85rem; color: #525252; margin: 0;">
+                        By placing your order, you agree to our terms and conditions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Seller Orders - Sustainable Fashion{% endblock %}
+
+{% block content %}
+<section class="container mt-4 mb-4">
+    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 2rem;">My Orders</h1>
+    
+    {% if orders %}
+        <div class="table" style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Product</th>
+                        <th>Customer</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.product.name }}</td>
+                            <td>{{ order.user.username }}</td>
+                            <td>{{ order.quantity }}</td>
+                            <td>₹{{ order.total_price }}</td>
+                            <td>
+                                {% if order.status == 'pending' %}
+                                    <span class="badge badge-warning">{{ order.get_status_display }}</span>
+                                {% elif order.status == 'delivered' %}
+                                    <span class="badge badge-success">{{ order.get_status_display }}</span>
+                                {% elif order.status == 'cancelled' or order.status == 'returned' %}
+                                    <span class="badge badge-danger">{{ order.get_status_display }}</span>
+                                {% else %}
+                                    <span class="badge badge-info">{{ order.get_status_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ order.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center p-4">
+            <p style="font-size: 1.25rem; color: #737373;">No orders yet.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
