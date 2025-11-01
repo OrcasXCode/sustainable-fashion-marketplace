@@ -33,6 +33,15 @@
                                 <span class="badge badge-warning">Pending</span>
                             {% endif %}
                         </p>
+                        {% if product.raw_material_source and product.environmental_benefits and product.manufacturing_process %}
+                            <div style="background-color: #dcfce7; border-radius: 4px; padding: 0.25rem 0.5rem; margin-top: 0.5rem; display: inline-block;">
+                                <span style="font-size: 0.75rem; color: #065f46; font-weight: 600;">Sustainability Complete</span>
+                            </div>
+                        {% else %}
+                            <div style="background-color: #fef3c7; border-radius: 4px; padding: 0.25rem 0.5rem; margin-top: 0.5rem; display: inline-block;">
+                                <span style="font-size: 0.75rem; color: #92400e; font-weight: 600;">Add Sustainability Info</span>
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="card-footer">
                         <span style="font-size: 1.25rem; font-weight: 700;">₹{{ product.price }}</span>

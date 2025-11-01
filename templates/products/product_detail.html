@@ -23,6 +23,9 @@
             <div class="product-meta">
                 <p><strong>Brand:</strong> {{ product.seller.brand_name }}</p>
                 <p><strong>Material:</strong> {{ product.material }}</p>
+                {% if product.certifications %}
+                    <p><strong>Certifications:</strong> {{ product.certifications }}</p>
+                {% endif %}
                 <p><strong>Stock:</strong> 
                     {% if product.stock > 0 %}
                         {{ product.stock }} available
@@ -56,6 +59,112 @@
             {% endif %}
         </div>
     </div>
+    
+    <!-- Sustainability Information Section -->
+    <div style="margin-top: 4rem;">
+        <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem; text-align: center;">Sustainability Story</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            
+            {% if product.raw_material_source %}
+            <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem;">
+                <div style="background-color: #000; color: #fff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem; margin-bottom: 1rem;">
+                    1
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Raw Material Source</h3>
+                <p style="color: #525252; line-height: 1.8;">{{ product.raw_material_source }}</p>
+            </div>
+            {% endif %}
+            
+            {% if product.transportation_method %}
+            <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem;">
+                <div style="background-color: #000; color: #fff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem; margin-bottom: 1rem;">
+                    2
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Transportation Method</h3>
+                <p style="color: #525252; line-height: 1.8;">{{ product.transportation_method }}</p>
+            </div>
+            {% endif %}
+            
+            {% if product.manufacturing_process %}
+            <div style="background-color: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 2rem;">
+                <div style="background-color: #000; color: #fff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem; margin-bottom: 1rem;">
+                    3
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Manufacturing Process</h3>
+                <p style="color: #525252; line-height: 1.8;">{{ product.manufacturing_process }}</p>
+            </div>
+            {% endif %}
+            
+        </div>
+    </div>
+    
+    <!-- Environmental Impact Metrics -->
+    {% if product.carbon_footprint or product.water_usage or product.recyclability %}
+    <div style="margin-top: 4rem;">
+        <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem; text-align: center;">Environmental Impact</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            
+            {% if product.carbon_footprint %}
+            <div style="background-color: #f5f5f5; border-radius: 12px; padding: 2rem; text-align: center;">
+                <div style="font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem;">CO₂</div>
+                <h4 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Carbon Footprint</h4>
+                <p style="color: #525252;">{{ product.carbon_footprint }}</p>
+            </div>
+            {% endif %}
+            
+            {% if product.water_usage %}
+            <div style="background-color: #f5f5f5; border-radius: 12px; padding: 2rem; text-align: center;">
+                <div style="font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem;">H₂O</div>
+                <h4 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Water Usage</h4>
+                <p style="color: #525252;">{{ product.water_usage }}</p>
+            </div>
+            {% endif %}
+            
+            {% if product.recyclability %}
+            <div style="background-color: #f5f5f5; border-radius: 12px; padding: 2rem; text-align: center;">
+                <div style="font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem;">♻</div>
+                <h4 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Recyclability</h4>
+                <p style="color: #525252;">{{ product.recyclability }}</p>
+            </div>
+            {% endif %}
+            
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Benefits & Impact Section -->
+    {% if product.environmental_benefits or product.usage_advantages or product.conventional_impact %}
+    <div style="margin-top: 4rem;">
+        <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem; text-align: center;">Why Choose This Product</h2>
+        
+        <div style="display: grid; gap: 2rem;">
+            
+            {% if product.environmental_benefits %}
+            <div style="background-color: #e0f2e9; border-radius: 12px; padding: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #065f46;">Environmental Benefits</h3>
+                <p style="color: #065f46; line-height: 1.8; font-size: 1.05rem;">{{ product.environmental_benefits }}</p>
+            </div>
+            {% endif %}
+            
+            {% if product.usage_advantages %}
+            <div style="background-color: #e0e7ff; border-radius: 12px; padding: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #1e3a8a;">Why You Should Use This</h3>
+                <p style="color: #1e3a8a; line-height: 1.8; font-size: 1.05rem;">{{ product.usage_advantages }}</p>
+            </div>
+            {% endif %}
+            
+            {% if product.conventional_impact %}
+            <div style="background-color: #fee2e2; border-radius: 12px; padding: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #991b1b;">Impact of Conventional Alternatives</h3>
+                <p style="color: #991b1b; line-height: 1.8; font-size: 1.05rem;">{{ product.conventional_impact }}</p>
+            </div>
+            {% endif %}
+            
+        </div>
+    </div>
+    {% endif %}
     
     {% if related_products %}
     <section class="mt-4">

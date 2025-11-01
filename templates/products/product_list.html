@@ -54,6 +54,11 @@
                         <p style="font-size: 0.85rem; color: #737373;">
                             <strong>Brand:</strong> {{ product.seller.brand_name }}
                         </p>
+                        {% if product.certifications %}
+                            <p style="font-size: 0.85rem; color: #059669; font-weight: 600;">
+                                Certified: {{ product.certifications|truncatewords:3 }}
+                            </p>
+                        {% endif %}
                         {% if product.stock > 0 %}
                             <p style="font-size: 0.85rem; color: #000;">
                                 <strong>Stock:</strong> {{ product.stock }} available
@@ -62,6 +67,11 @@
                             <p style="font-size: 0.85rem; color: #737373;">
                                 <strong>Out of Stock</strong>
                             </p>
+                        {% endif %}
+                        {% if product.raw_material_source or product.environmental_benefits %}
+                            <div style="background-color: #dcfce7; border-radius: 4px; padding: 0.25rem 0.5rem; margin-top: 0.5rem; display: inline-block;">
+                                <span style="font-size: 0.75rem; color: #065f46; font-weight: 600;">Sustainability Verified</span>
+                            </div>
                         {% endif %}
                     </div>
                     <div class="card-footer">

@@ -4,22 +4,200 @@
 
 {% block content %}
 <div class="container mt-4 mb-4">
-    <div class="form-card" style="max-width: 700px;">
+    <div class="form-card" style="max-width: 800px;">
         <h2>Edit Product</h2>
-        <p class="text-center mb-3" style="color: #737373;">Update product details</p>
+        <p class="text-center mb-3" style="color: #737373;">Update product details and sustainability information</p>
         
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             
-            {% for field in form %}
+            <!-- Basic Information Section -->
+            <div style="background-color: #f5f5f5; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Basic Information</h3>
+                
                 <div class="form-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}
-                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ field.errors.0 }}</p>
+                    <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.name.errors.0 }}</p>
                     {% endif %}
                 </div>
-            {% endfor %}
+                
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.description.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="{{ form.price.id_for_label }}">{{ form.price.label }}</label>
+                        {{ form.price }}
+                        {% if form.price.errors %}
+                            <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.price.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.material.id_for_label }}">{{ form.material.label }}</label>
+                        {{ form.material }}
+                        {% if form.material.errors %}
+                            <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.material.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.stock.id_for_label }}">{{ form.stock.label }}</label>
+                        {{ form.stock }}
+                        {% if form.stock.errors %}
+                            <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.stock.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+                    {{ form.image }}
+                    {% if form.image.errors %}
+                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.image.errors.0 }}</p>
+                    {% endif %}
+                    {% if product.image %}
+                        <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">Current image: {{ product.image.name }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Sustainability Details Section -->
+            <div style="background-color: #f5f5f5; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Sustainability Details</h3>
+                <p style="color: #737373; font-size: 0.9rem; margin-bottom: 1rem;">Help buyers understand the environmental impact and benefits</p>
+                
+                <div class="form-group">
+                    <label for="{{ form.raw_material_source.id_for_label }}">{{ form.raw_material_source.label }}</label>
+                    {{ form.raw_material_source }}
+                    {% if form.raw_material_source.errors %}
+                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.raw_material_source.errors.0 }}</p>
+                    {% endif %}
+                    {% if form.raw_material_source.help_text %}
+                        <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.raw_material_source.help_text }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.transportation_method.id_for_label }}">{{ form.transportation_method.label }}</label>
+                    {{ form.transportation_method }}
+                    {% if form.transportation_method.errors %}
+                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.transportation_method.errors.0 }}</p>
+                    {% endif %}
+                    {% if form.transportation_method.help_text %}
+                        <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.transportation_method.help_text }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.manufacturing_process.id_for_label }}">{{ form.manufacturing_process.label }}</label>
+                    {{ form.manufacturing_process }}
+                    {% if form.manufacturing_process.errors %}
+                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.manufacturing_process.errors.0 }}</p>
+                    {% endif %}
+                    {% if form.manufacturing_process.help_text %}
+                        <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.manufacturing_process.help_text }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.certifications.id_for_label }}">{{ form.certifications.label }}</label>
+                    {{ form.certifications }}
+                    {% if form.certifications.errors %}
+                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.certifications.errors.0 }}</p>
+                    {% endif %}
+                    {% if form.certifications.help_text %}
+                        <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.certifications.help_text }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Environmental Impact Section -->
+            <div style="background-color: #f5f5f5; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Environmental Impact</h3>
+                <p style="color: #737373; font-size: 0.9rem; margin-bottom: 1rem;">Quantify the positive environmental impact</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="{{ form.carbon_footprint.id_for_label }}">{{ form.carbon_footprint.label }}</label>
+                        {{ form.carbon_footprint }}
+                        {% if form.carbon_footprint.errors %}
+                            <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.carbon_footprint.errors.0 }}</p>
+                        {% endif %}
+                        {% if form.carbon_footprint.help_text %}
+                            <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.carbon_footprint.help_text }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.water_usage.id_for_label }}">{{ form.water_usage.label }}</label>
+                        {{ form.water_usage }}
+                        {% if form.water_usage.errors %}
+                            <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.water_usage.errors.0 }}</p>
+                        {% endif %}
+                        {% if form.water_usage.help_text %}
+                            <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.water_usage.help_text }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.recyclability.id_for_label }}">{{ form.recyclability.label }}</label>
+                        {{ form.recyclability }}
+                        {% if form.recyclability.errors %}
+                            <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.recyclability.errors.0 }}</p>
+                        {% endif %}
+                        {% if form.recyclability.help_text %}
+                            <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.recyclability.help_text }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Benefits & Impact Section -->
+            <div style="background-color: #f5f5f5; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Benefits & Impact</h3>
+                <p style="color: #737373; font-size: 0.9rem; margin-bottom: 1rem;">Explain why this product matters</p>
+                
+                <div class="form-group">
+                    <label for="{{ form.environmental_benefits.id_for_label }}">{{ form.environmental_benefits.label }}</label>
+                    {{ form.environmental_benefits }}
+                    {% if form.environmental_benefits.errors %}
+                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.environmental_benefits.errors.0 }}</p>
+                    {% endif %}
+                    {% if form.environmental_benefits.help_text %}
+                        <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.environmental_benefits.help_text }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.usage_advantages.id_for_label }}">{{ form.usage_advantages.label }}</label>
+                    {{ form.usage_advantages }}
+                    {% if form.usage_advantages.errors %}
+                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.usage_advantages.errors.0 }}</p>
+                    {% endif %}
+                    {% if form.usage_advantages.help_text %}
+                        <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.usage_advantages.help_text }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.conventional_impact.id_for_label }}">{{ form.conventional_impact.label }}</label>
+                    {{ form.conventional_impact }}
+                    {% if form.conventional_impact.errors %}
+                        <p style="color: #737373; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.conventional_impact.errors.0 }}</p>
+                    {% endif %}
+                    {% if form.conventional_impact.help_text %}
+                        <p style="color: #a3a3a3; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.conventional_impact.help_text }}</p>
+                    {% endif %}
+                </div>
+            </div>
             
             <div class="flex gap-2">
                 <button type="submit" class="btn-black" style="flex: 1; padding: 0.75rem;">
